@@ -1,2 +1,5 @@
-# issue-tracker
-Issue Tracker Web Application designed to help users report and manage issues efficiently within a system.
+# Mantine Vite template
+
+Get started with the template by clicking `Use this template` button on the top of the page.
+
+[Documentation](https://mantine.dev/guides/vite/)
