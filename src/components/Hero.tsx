@@ -1,5 +1,6 @@
 import React from "react";
 import classes from "./Hero.module.css";
+import { Link } from "react-router-dom";
 
 const Hero: React.FC = () => {
   return (
@@ -9,28 +10,12 @@ const Hero: React.FC = () => {
         Track and manage your issues efficiently.
       </p>
       <div className={classes.buttonContainer}>
-        <button
-          className={classes.button}
-          onMouseEnter={(e) =>
-            (e.currentTarget.style.backgroundColor = "#0056b3")
-          }
-          onMouseLeave={(e) =>
-            (e.currentTarget.style.backgroundColor = "#007bff")
-          }
-        >
+        <Link to="/register" className={classes.button}>
           Register
-        </button>
-        <button
-          className={classes.button}
-          onMouseEnter={(e) =>
-            (e.currentTarget.style.backgroundColor = "#0056b3")
-          }
-          onMouseLeave={(e) =>
-            (e.currentTarget.style.backgroundColor = "#007bff")
-          }
-        >
+        </Link>
+        <Link to="/login" className={classes.button}>
           Login
-        </button>
+        </Link>
       </div>
     </section>
   );
