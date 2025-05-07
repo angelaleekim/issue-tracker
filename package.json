@@ -6,11 +6,14 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "start": "vite preview"
+    "start": "vite preview",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@mantine/core": "7.17.4",
+    "@mantine/form": "^8.0.0",
     "@mantine/hooks": "7.17.4",
+    "@tabler/icons-react": "^3.31.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
@@ -21,6 +24,7 @@
     "postcss": "^8.5.3",
     "postcss-preset-mantine": "1.17.0",
     "postcss-simple-vars": "^7.0.1",
+    "prettier": "^3.5.3",
     "typescript": "^5.8.2",
     "vite": "^6.2.2"
   },

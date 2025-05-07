@@ -1,0 +1,12 @@
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.navbar-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: #000;
+  background-color: aqua;
+}

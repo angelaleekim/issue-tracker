@@ -1,6 +1,6 @@
-import React from "react";
-import classes from "./Hero.module.css";
-import { Link } from "react-router-dom";
+import React from 'react';
+import classes from './Hero.module.css';
+import { Link } from 'react-router-dom';
 
 const Hero: React.FC = () => {
   return (
