@@ -1,9 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import IssueTable from '../Table/IssueTable';
 import { MantineProvider } from '@mantine/core';
 import classes from './Dashboard.module.css';
 
 const Dashboard: React.FC = () => {
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      window.location.href = '/login'; // Redirect unauthenticated users to the login page
+    }
+  }, []);
+
   return (
     <MantineProvider>
       <div className={classes.container}>

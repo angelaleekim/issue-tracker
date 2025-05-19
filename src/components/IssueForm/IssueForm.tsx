@@ -15,6 +15,7 @@ const IssueForm: React.FC = () => {
     description: string;
     priority: string;
     author: string;
+    status: string; // Add status field
   }
 
   const form = useForm<FormValues>({
@@ -23,6 +24,7 @@ const IssueForm: React.FC = () => {
       description: '',
       priority: '',
       author: '',
+      status: 'pending', // Add default status
     },
     validate: {
       title: (value: string) =>
@@ -54,6 +56,7 @@ const IssueForm: React.FC = () => {
         body: JSON.stringify({
           ...values,
           priority: values.priority,
+          status: values.status, // Ensure status is included
         }),
       });
 
@@ -109,6 +112,7 @@ const IssueForm: React.FC = () => {
           className={classes.input}
         />
         <Select
+          className={classes.input}
           label="Priority"
           placeholder="Select priority"
           data={[
@@ -117,14 +121,13 @@ const IssueForm: React.FC = () => {
             { value: 'high', label: 'High' },
           ]}
           {...form.getInputProps('priority')}
-          className={classes.input}
         />
         <Textarea
           label="Description"
           placeholder="Enter issue description"
           {...form.getInputProps('description')}
           className={classes.input}
-          minRows={4}
+          minRows={5}
         />
         <Button type="submit" className={classes.button} fullWidth>
           Submit

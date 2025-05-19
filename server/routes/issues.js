@@ -6,10 +6,12 @@ const router = express.Router();
 // Create an issue
 router.post('/', async (req, res) => {
   try {
+    console.log('Request Body:', req.body); // Debugging log
     const issue = new Issue(req.body);
     await issue.save();
     res.status(201).json(issue);
   } catch (err) {
+    console.error('Error saving issue:', err);
     res.status(400).json({ error: err.message });
   }
 });

@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
 import { Drawer, ActionIcon, NavLink } from '@mantine/core';
-import { IconBug, IconMenu2, IconList } from '@tabler/icons-react';
-import { Link } from 'react-router-dom';
+import { IconBug, IconMenu2, IconList, IconLogout } from '@tabler/icons-react';
+import { Link, useNavigate } from 'react-router-dom';
 import classes from './Navbar.module.css';
 
 const Navbar: React.FC = () => {
   const [opened, setOpened] = useState(false);
+  const navigate = useNavigate(); // Initialize navigate
 
   const handleClose = () => setOpened(false); // Function to close the drawer
+
+  const handleSignOut = () => {
+    localStorage.removeItem('token'); // Clear the auth token
+    navigate('/'); // Redirect to the Hero page
+  };
 
   return (
     <>
@@ -47,6 +53,23 @@ const Navbar: React.FC = () => {
                 onClick={handleClose}
               >
                 View All Issues
+              </Link>
+            </div>
+          }
+        />
+        <NavLink
+          label={
+            <div className={classes.navLinkLabel}>
+              <IconLogout size={16} className={classes.icon} />
+              <Link
+                to="/"
+                className={classes.link}
+                onClick={() => {
+                  handleSignOut();
+                  handleClose();
+                }}
+              >
+                Sign Out
               </Link>
             </div>
           }

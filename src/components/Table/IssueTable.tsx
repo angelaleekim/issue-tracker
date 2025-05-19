@@ -6,11 +6,23 @@ import {
   Select,
   Menu,
   ActionIcon,
+  Modal,
+  Button,
+  Tooltip,
 } from '@mantine/core';
-import { IconDots, IconTrash, IconCheck, IconX } from '@tabler/icons-react'; // Import icons
+import {
+  IconDots,
+  IconTrash,
+  IconCheck,
+  IconX,
+  IconEye,
+  IconClock,
+  IconSend,
+} from '@tabler/icons-react'; // Import icons
 import { notifications } from '@mantine/notifications';
 import classes from './IssueTable.module.css';
 import { PRIORITY_COLORS, Priority } from '../../constants';
+import { useDisclosure } from '@mantine/hooks';
 
 interface Issue {
   _id: string;
@@ -18,6 +30,7 @@ interface Issue {
   description: string;
   priority: Priority;
   author: string;
+  status: string;
 }
 
 const IssueTable: React.FC = () => {
@@ -26,6 +39,8 @@ const IssueTable: React.FC = () => {
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [sortBy, setSortBy] = useState<keyof Issue | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const [opened, { open, close }] = useDisclosure(false);
+  const [selectedIssue, setSelectedIssue] = useState<Issue | null>(null);
 
   const fetchIssues = async () => {
     try {
@@ -37,7 +52,7 @@ const IssueTable: React.FC = () => {
       setIssues(
         data.map((issue: Issue) => ({
           ...issue,
-          priority: issue.priority.toUpperCase(), // Ensure consistent casing
+          priority: issue.priority.toUpperCase(), // Convert to uppercase (e.g., 'LOW', 'MEDIUM', 'HIGH')
         }))
       );
     } catch (error) {
@@ -82,7 +97,55 @@ const IssueTable: React.FC = () => {
     }
   };
 
+  const handleView = (issue: Issue) => {
+    setSelectedIssue(issue);
+    open();
+  };
+
+  const handleUpdateStatus = async (id: string, newStatus: string) => {
+    try {
+      const response = await fetch(`http://localhost:3000/api/issues/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update status');
+      }
+
+      const updatedIssue = await response.json();
+      setIssues((prevIssues) =>
+        prevIssues.map((issue) =>
+          issue._id === id ? { ...issue, status: updatedIssue.status } : issue
+        )
+      );
+
+      notifications.show({
+        color: 'teal',
+        title: 'Status Updated',
+        message: `The issue status has been updated to ${newStatus.replace(
+          '_',
+          ' '
+        )}.`,
+        icon: <IconCheck size={18} />,
+      });
+    } catch (error) {
+      console.error('Error updating status:', error);
+      notifications.show({
+        color: 'red',
+        title: 'Update Failed',
+        message:
+          'There was an error updating the issue status. Please try again.',
+        icon: <IconX size={18} />,
+      });
+    }
+  };
+
   const PRIORITY_ORDER = ['LOW', 'MEDIUM', 'HIGH'];
+  const STATUS_ORDER = ['pending', 'in_progress', 'resolved']; // Define status order
 
   const sortedIssues = [...issues].sort((a, b) => {
     if (!sortBy) return 0;
@@ -90,6 +153,12 @@ const IssueTable: React.FC = () => {
     if (sortBy === 'priority') {
       const aIndex = PRIORITY_ORDER.indexOf(a.priority);
       const bIndex = PRIORITY_ORDER.indexOf(b.priority);
+      return sortDirection === 'asc' ? aIndex - bIndex : bIndex - aIndex;
+    }
+
+    if (sortBy === 'status') {
+      const aIndex = STATUS_ORDER.indexOf(a.status);
+      const bIndex = STATUS_ORDER.indexOf(b.status);
       return sortDirection === 'asc' ? aIndex - bIndex : bIndex - aIndex;
     }
 
@@ -119,6 +188,29 @@ const IssueTable: React.FC = () => {
         <Badge color={PRIORITY_COLORS[issue.priority]}>{issue.priority}</Badge>
       </Table.Td>
       <Table.Td>
+        <Tooltip label="Pending" withArrow>
+          <div>
+            {issue.status === 'pending' && (
+              <IconClock color="#4dabf7" size={18} />
+            )}
+          </div>
+        </Tooltip>
+        <Tooltip label="In Progress" withArrow>
+          <div>
+            {issue.status === 'in_progress' && (
+              <IconSend color="#b197fc" size={18} />
+            )}
+          </div>
+        </Tooltip>
+        <Tooltip label="Resolved" withArrow>
+          <div>
+            {issue.status === 'resolved' && (
+              <IconCheck color="#69db7c" size={18} />
+            )}
+          </div>
+        </Tooltip>
+      </Table.Td>
+      <Table.Td>
         <Menu>
           <Menu.Target>
             <ActionIcon variant="subtle" color="black">
@@ -126,6 +218,12 @@ const IssueTable: React.FC = () => {
             </ActionIcon>
           </Menu.Target>
           <Menu.Dropdown>
+            <Menu.Item
+              leftSection={<IconEye size={16} />} // Eye icon for View
+              onClick={() => handleView(issue)}
+            >
+              View
+            </Menu.Item>
             <Menu.Item
               leftSection={<IconTrash size={16} />}
               color="red"
@@ -158,7 +256,7 @@ const IssueTable: React.FC = () => {
               Author{' '}
               {sortBy === 'author' && (sortDirection === 'asc' ? '↑' : '↓')}
             </Table.Th>
-            <Table.Th className={classes.headerCell}>Description </Table.Th>
+            <Table.Th className={classes.headerCell}>Description</Table.Th>
             <Table.Th
               className={classes.headerCell}
               onClick={() => handleSort('priority')}
@@ -166,11 +264,77 @@ const IssueTable: React.FC = () => {
               Priority{' '}
               {sortBy === 'priority' && (sortDirection === 'asc' ? '↑' : '↓')}
             </Table.Th>
+            <Table.Th
+              className={classes.headerCell}
+              onClick={() => handleSort('status')}
+            >
+              Status{' '}
+              {sortBy === 'status' && (sortDirection === 'asc' ? '↑' : '↓')}
+            </Table.Th>
             <Table.Th className={classes.headerCell}></Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>{rows}</Table.Tbody>
       </Table>
+      <Modal opened={opened} onClose={close} title="Issue Details" centered>
+        {selectedIssue && (
+          <div>
+            <p>
+              <strong>Title:</strong> {selectedIssue.title}
+            </p>
+            <p>
+              <strong>Author:</strong> {selectedIssue.author}
+            </p>
+            <p>
+              <strong>Description:</strong> {selectedIssue.description}
+            </p>
+            <p>
+              <strong>Priority:</strong>{' '}
+              {selectedIssue.priority.charAt(0).toUpperCase() +
+                selectedIssue.priority.slice(1).toLowerCase()}
+            </p>
+            <p>
+              <strong>Status:</strong>{' '}
+              {selectedIssue.status.charAt(0).toUpperCase() +
+                selectedIssue.status
+                  .slice(1)
+                  .replace('_', ' ')
+                  .replace('progress', 'Progress')}
+            </p>
+            {selectedIssue.status === 'pending' && (
+              <>
+                <Button
+                  onClick={() =>
+                    handleUpdateStatus(selectedIssue._id, 'in_progress')
+                  }
+                  color="blue"
+                  style={{ marginRight: '10px' }}
+                >
+                  Mark as In Progress
+                </Button>
+                <Button
+                  onClick={() =>
+                    handleUpdateStatus(selectedIssue._id, 'resolved')
+                  }
+                  color="green"
+                >
+                  Mark as Resolved
+                </Button>
+              </>
+            )}
+            {selectedIssue.status === 'in_progress' && (
+              <Button
+                onClick={() =>
+                  handleUpdateStatus(selectedIssue._id, 'resolved')
+                }
+                color="green"
+              >
+                Mark as Resolved
+              </Button>
+            )}
+          </div>
+        )}
+      </Modal>
       <div className={classes.paginationContainer}>
         <Select
           label="Items per page"

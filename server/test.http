@@ -1,4 +1,115 @@
-### Test POST create a new issue
+### Delete all issues individually
+DELETE http://localhost:3000/api/issues/682a87f9537b1a13cacb41e8
+Accept: application/json
+
+###
+
+DELETE http://localhost:3000/api/issues/682a8808537b1a13cacb41ec
+Accept: application/json
+
+###
+
+DELETE http://localhost:3000/api/issues/682a880a537b1a13cacb41ee
+Accept: application/json
+
+###
+
+DELETE http://localhost:3000/api/issues/682a880b537b1a13cacb41f0
+Accept: application/json
+
+###
+
+DELETE http://localhost:3000/api/issues/682a880d537b1a13cacb41f2
+Accept: application/json
+
+###
+
+DELETE http://localhost:3000/api/issues/682a880e537b1a13cacb41f4
+Accept: application/json
+
+###
+
+DELETE http://localhost:3000/api/issues/682a8810537b1a13cacb41f6
+Accept: application/json
+
+###
+
+DELETE http://localhost:3000/api/issues/682a8811537b1a13cacb41f8
+Accept: application/json
+
+###
+
+DELETE http://localhost:3000/api/issues/682a8812537b1a13cacb41fa
+Accept: application/json
+
+###
+
+DELETE http://localhost:3000/api/issues/682a8814537b1a13cacb41fc
+Accept: application/json
+
+###
+
+DELETE http://localhost:3000/api/issues/682a8815537b1a13cacb41fe
+Accept: application/json
+
+###
+
+DELETE http://localhost:3000/api/issues/682a8816537b1a13cacb4200
+Accept: application/json
+
+###
+
+DELETE http://localhost:3000/api/issues/682a8818537b1a13cacb4202
+Accept: application/json
+
+###
+
+DELETE http://localhost:3000/api/issues/682a8819537b1a13cacb4204
+Accept: application/json
+
+###
+
+DELETE http://localhost:3000/api/issues/682a881a537b1a13cacb4206
+Accept: application/json
+
+###
+
+DELETE http://localhost:3000/api/issues/682a881b537b1a13cacb4208
+Accept: application/json
+
+###
+
+DELETE http://localhost:3000/api/issues/682a881d537b1a13cacb420a
+Accept: application/json
+
+###
+
+DELETE http://localhost:3000/api/issues/682a881e537b1a13cacb420c
+Accept: application/json
+
+###
+
+DELETE http://localhost:3000/api/issues/682a8820537b1a13cacb420e
+Accept: application/json
+
+###
+
+DELETE http://localhost:3000/api/issues/682a8822537b1a13cacb4210
+Accept: application/json
+
+###
+
+DELETE http://localhost:3000/api/issues/682a8823537b1a13cacb4212
+Accept: application/json
+
+###
+
+DELETE http://localhost:3000/api/issues/682a8824537b1a13cacb4214
+Accept: application/json
+
+###
+
+### Create issues with lowercase statuses
 POST http://localhost:3000/api/issues
 Content-Type: application/json
 
@@ -6,7 +117,8 @@ Content-Type: application/json
     "title": "Login Page Bug",
     "description": "The login button does not respond when clicked.",
     "priority": "medium",
-    "author": "Alice Johnson"
+    "author": "Alice Johnson",
+    "status": "pending"
 }
 
 ###
@@ -18,7 +130,8 @@ Content-Type: application/json
     "title": "Database Connection Error",
     "description": "The application fails to connect to the database intermittently.",
     "priority": "high",
-    "author": "Bob Smith"
+    "author": "Bob Smith",
+    "status": "in_progress"
 }
 
 ###
@@ -30,7 +143,8 @@ Content-Type: application/json
     "title": "UI Overlap on Dashboard",
     "description": "The widgets on the dashboard overlap on smaller screens.",
     "priority": "low",
-    "author": "Chris Evans"
+    "author": "Chris Evans",
+    "status": "resolved"
 }
 
 ###
@@ -42,7 +156,8 @@ Content-Type: application/json
     "title": "Search Functionality Broken",
     "description": "Search results are not displayed for valid queries.",
     "priority": "high",
-    "author": "Diana Prince"
+    "author": "Diana Prince",
+    "status": "pending"
 }
 
 ###
@@ -54,7 +169,8 @@ Content-Type: application/json
     "title": "Slow Page Load Times",
     "description": "The homepage takes over 10 seconds to load.",
     "priority": "medium",
-    "author": "Bruce Wayne"
+    "author": "Bruce Wayne",
+    "status": "in_progress"
 }
 
 ###
@@ -66,7 +182,8 @@ Content-Type: application/json
     "title": "Error 500 on Profile Update",
     "description": "Updating the profile throws a server error.",
     "priority": "high",
-    "author": "Clark Kent"
+    "author": "Clark Kent",
+    "status": "resolved"
 }
 
 ###
@@ -78,7 +195,8 @@ Content-Type: application/json
     "title": "Broken Image Links",
     "description": "Several images on the product page are not loading.",
     "priority": "low",
-    "author": "Natasha Romanoff"
+    "author": "Natasha Romanoff",
+    "status": "pending"
 }
 
 ###
@@ -90,7 +208,8 @@ Content-Type: application/json
     "title": "Incorrect Total in Cart",
     "description": "The total price in the cart is calculated incorrectly.",
     "priority": "medium",
-    "author": "Steve Rogers"
+    "author": "Steve Rogers",
+    "status": "in_progress"
 }
 
 ###
@@ -102,7 +221,8 @@ Content-Type: application/json
     "title": "Notifications Not Displaying",
     "description": "Users are not receiving notifications for new messages.",
     "priority": "medium",
-    "author": "Tony Stark"
+    "author": "Tony Stark",
+    "status": "resolved"
 }
 
 ###
@@ -114,7 +234,8 @@ Content-Type: application/json
     "title": "Dark Mode Not Saving",
     "description": "The dark mode setting resets after refreshing the page.",
     "priority": "low",
-    "author": "Wanda Maximoff"
+    "author": "Wanda Maximoff",
+    "status": "pending"
 }
 
 ###
@@ -126,7 +247,8 @@ Content-Type: application/json
     "title": "Payment Gateway Timeout",
     "description": "Payments fail due to a timeout error.",
     "priority": "high",
-    "author": "Peter Parker"
+    "author": "Peter Parker",
+    "status": "in_progress"
 }
 
 ###
@@ -138,7 +260,8 @@ Content-Type: application/json
     "title": "Missing Footer Links",
     "description": "The footer is missing links to the privacy policy and terms of service.",
     "priority": "low",
-    "author": "Scott Lang"
+    "author": "Scott Lang",
+    "status": "resolved"
 }
 
 ###
@@ -150,7 +273,8 @@ Content-Type: application/json
     "title": "Session Expiry Too Short",
     "description": "User sessions expire after only 5 minutes of inactivity.",
     "priority": "medium",
-    "author": "Stephen Strange"
+    "author": "Stephen Strange",
+    "status": "pending"
 }
 
 ###
@@ -162,7 +286,8 @@ Content-Type: application/json
     "title": "Broken Pagination",
     "description": "Pagination on the blog page does not work beyond page 3.",
     "priority": "low",
-    "author": "Carol Danvers"
+    "author": "Carol Danvers",
+    "status": "in_progress"
 }
 
 ###
@@ -174,7 +299,8 @@ Content-Type: application/json
     "title": "File Upload Fails",
     "description": "Uploading files larger than 5MB fails with an error.",
     "priority": "high",
-    "author": "T'Challa"
+    "author": "T'Challa",
+    "status": "resolved"
 }
 
 ###
@@ -186,7 +312,8 @@ Content-Type: application/json
     "title": "Incorrect Date Format",
     "description": "Dates are displayed in MM/DD/YYYY format instead of DD/MM/YYYY.",
     "priority": "low",
-    "author": "Sam Wilson"
+    "author": "Sam Wilson",
+    "status": "pending"
 }
 
 ###
@@ -198,7 +325,8 @@ Content-Type: application/json
     "title": "Unresponsive Sidebar",
     "description": "The sidebar does not collapse when clicked.",
     "priority": "medium",
-    "author": "Bucky Barnes"
+    "author": "Bucky Barnes",
+    "status": "in_progress"
 }
 
 ###
@@ -210,7 +338,8 @@ Content-Type: application/json
     "title": "Email Verification Not Sent",
     "description": "New users are not receiving email verification links.",
     "priority": "high",
-    "author": "Nick Fury"
+    "author": "Nick Fury",
+    "status": "resolved"
 }
 
 ###
@@ -222,7 +351,8 @@ Content-Type: application/json
     "title": "Search Bar Placeholder Missing",
     "description": "The search bar does not display a placeholder text.",
     "priority": "low",
-    "author": "Maria Hill"
+    "author": "Maria Hill",
+    "status": "pending"
 }
 
 ###
@@ -234,7 +364,8 @@ Content-Type: application/json
     "title": "Profile Picture Upload Cropping",
     "description": "Uploaded profile pictures are cropped incorrectly.",
     "priority": "medium",
-    "author": "Phil Coulson"
+    "author": "Phil Coulson",
+    "status": "in_progress"
 }
 
 ###
@@ -246,7 +377,8 @@ Content-Type: application/json
     "title": "Logout Button Not Working",
     "description": "Clicking the logout button does not log the user out.",
     "priority": "high",
-    "author": "Peggy Carter"
+    "author": "Peggy Carter",
+    "status": "resolved"
 }
 
 ###
@@ -258,204 +390,7 @@ Content-Type: application/json
     "title": "Tooltip Text Cut Off",
     "description": "Tooltip text is cut off on smaller screens.",
     "priority": "low",
-    "author": "Shuri"
+    "author": "Shuri",
+    "status": "pending"
 }
-
-###
-
-### Test GET all issues
-GET http://localhost:3000/api/issues
-Accept: application/json
-
-###
-
-### Test GET a single issue by ID
-GET `
-Accept: application/json
-
-###
-
-### Test PUT update an existing issue
-PUT http://localhost:3000/api/issues/682a6fa8600c8e1841792630
-Content-Type: application/json
-
-{
-    "title": "Login Page Bug",
-    "description": "The login button does not respond when clicked.",
-    "priority": "medium",
-    "author": "Alice Johnson"
-}
-
-###
-
-PUT http://localhost:3000/api/issues/682a6fbd600c8e1841792638
-Content-Type: application/json
-
-{
-    "title": "Database Connection Error",
-    "description": "The application fails to connect to the database intermittently.",
-    "priority": "high",
-    "author": "Bob Smith"
-}
-
-###
-
-PUT http://localhost:3000/api/issues/682a6ffc600c8e184179263a
-Content-Type: application/json
-
-{
-    "title": "UI Overlap on Dashboard",
-    "description": "The widgets on the dashboard overlap on smaller screens.",
-    "priority": "low",
-    "author": "Chris Evans"
-}
-
-###
-
-PUT http://localhost:3000/api/issues/682a7042600c8e1841792644
-Content-Type: application/json
-
-{
-    "title": "Slow Page Load Times",
-    "description": "The homepage takes over 10 seconds to load.",
-    "priority": "medium",
-    "author": "Bruce Wayne"
-}
-
-###
-
-PUT http://localhost:3000/api/issues/682a7043600c8e1841792646
-Content-Type: application/json
-
-{
-    "title": "Error 500 on Profile Update",
-    "description": "Updating the profile throws a server error.",
-    "priority": "high",
-    "author": "Clark Kent"
-}
-
-###
-
-PUT http://localhost:3000/api/issues/682a7045600c8e1841792648
-Content-Type: application/json
-
-{
-    "title": "Broken Image Links",
-    "description": "Several images on the product page are not loading.",
-    "priority": "low",
-    "author": "Natasha Romanoff"
-}
-
-###
-
-PUT http://localhost:3000/api/issues/682a7047600c8e184179264a
-Content-Type: application/json
-
-{
-    "title": "Incorrect Total in Cart",
-    "description": "The total price in the cart is calculated incorrectly.",
-    "priority": "medium",
-    "author": "Steve Rogers"
-}
-
-###
-
-PUT http://localhost:3000/api/issues/682a704a600c8e184179264c
-Content-Type: application/json
-
-{
-    "title": "Notifications Not Displaying",
-    "description": "Users are not receiving notifications for new messages.",
-    "priority": "medium",
-    "author": "Tony Stark"
-}
-
-###
-
-PUT http://localhost:3000/api/issues/682a704b600c8e184179264e
-Content-Type: application/json
-
-{
-    "title": "Dark Mode Not Saving",
-    "description": "The dark mode setting resets after refreshing the page.",
-    "priority": "low",
-    "author": "Wanda Maximoff"
-}
-
-###
-
-PUT http://localhost:3000/api/issues/682a704d600c8e1841792650
-Content-Type: application/json
-
-{
-    "title": "Payment Gateway Timeout",
-    "description": "Payments fail due to a timeout error.",
-    "priority": "high",
-    "author": "Peter Parker"
-}
-
-###
-
-PUT http://localhost:3000/api/issues/682a704f600c8e1841792652
-Content-Type: application/json
-
-{
-    "title": "Missing Footer Links",
-    "description": "The footer is missing links to the privacy policy and terms of service.",
-    "priority": "low",
-    "author": "Scott Lang"
-}
-
-###
-
-PUT http://localhost:3000/api/issues/64b7f9e2c9a1b2d3e4f56791
-Content-Type: application/json
-
-{
-    "title": "Unresponsive Sidebar",
-    "description": "The sidebar does not collapse when clicked.",
-    "priority": "medium",
-    "author": "Bucky Barnes"
-}
-
-###
-
-PUT http://localhost:3000/api/issues/64b7f9e2c9a1b2d3e4f56792
-Content-Type: application/json
-
-{
-    "title": "Email Verification Not Sent",
-    "description": "New users are not receiving email verification links.",
-    "priority": "high",
-    "author": "Nick Fury"
-}
-
-###
-
-PUT http://localhost:3000/api/issues/64b7f9e2c9a1b2d3e4f56793
-Content-Type: application/json
-
-{
-    "title": "Search Bar Placeholder Missing",
-    "description": "The search bar does not display a placeholder text.",
-    "priority": "low",
-    "author": "Maria Hill"
-}
-
-###
-
-PUT http://localhost:3000/api/issues/64b7f9e2c9a1b2d3e4f56794
-Content-Type: application/json
-
-{
-    "title": "Profile Picture Upload Cropping",
-    "description": "Uploaded profile pictures are cropped incorrectly.",
-    "priority": "medium",
-    "author": "Phil Coulson"
-}
-
-###
-
-### Test DELETE an issue by ID
-DELETE http://localhost:3000/api/issues/682a6fa8600c8e1841792630
 
