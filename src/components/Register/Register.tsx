@@ -46,6 +46,7 @@ const Register: React.FC = () => {
           color: 'red',
           title: 'Registration Failed',
           message: error,
+          loading: false,
           icon: <IconX size={18} />,
           autoClose: 2000,
         });
@@ -57,6 +58,7 @@ const Register: React.FC = () => {
         color: 'teal',
         title: 'Registration Successful',
         message: 'Your account has been created!',
+        loading: false,
         icon: <IconCheck size={18} />,
         autoClose: 2000,
       });
@@ -68,6 +70,7 @@ const Register: React.FC = () => {
         id,
         color: 'red',
         title: 'Registration Failed',
+        loading: false,
         message: 'An error occurred. Please try again.',
         icon: <IconX size={18} />,
         autoClose: 2000,

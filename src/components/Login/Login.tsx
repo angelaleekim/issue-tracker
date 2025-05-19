@@ -46,6 +46,7 @@ const Login: React.FC = () => {
       notifications.update({
         id,
         color: 'teal',
+        loading: false,
         title: 'Login Successful',
         message: 'You have successfully logged in!',
         icon: <IconCheck size={18} />,
