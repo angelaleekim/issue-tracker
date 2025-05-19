@@ -1,7 +1,32 @@
 .headerCell {
   text-align: left;
+  cursor: pointer;
 }
 
 .tableRow {
   height: 3em;
+}
+
+.pagination {
+  margin-top: 1em;
+  display: flex;
+  justify-content: center;
+}
+
+.controls {
+  margin-bottom: 1em;
+  display: flex;
+  justify-content: center; /* Center the controls */
+}
+
+.select {
+  width: 150px;
+}
+
+.paginationContainer {
+  margin-top: 2em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1em; /* Add spacing between Select and Pagination */
 }

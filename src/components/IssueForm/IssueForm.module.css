@@ -1,6 +1,6 @@
 .container {
   max-width: 500px;
-  margin: 120px auto;
+  margin: 0px auto; /* Reduced margin to move the form higher */
   padding: 20px;
   border-radius: 8px;
 }

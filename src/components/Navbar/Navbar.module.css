@@ -1,6 +1,7 @@
 .navLinkLabel {
   display: flex;
   align-items: left;
+  padding: 0.5em;
 }
 
 .icon {
