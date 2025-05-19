@@ -40,11 +40,14 @@ const Register: React.FC = () => {
     });
 
     try {
-      const response = await fetch('http://localhost:3000/api/users/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
+      const response = await fetch(
+        'https://issue-tracker-m82y.onrender.com/api/users/register',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        }
+      );
 
       if (!response.ok) {
         const { error } = await response.json();

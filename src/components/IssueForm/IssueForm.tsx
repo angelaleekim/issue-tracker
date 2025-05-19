@@ -48,17 +48,20 @@ const IssueForm: React.FC = () => {
     });
 
     try {
-      const response = await fetch('http://localhost:3000/api/issues', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...values,
-          priority: values.priority,
-          status: values.status, // Ensure status is included
-        }),
-      });
+      const response = await fetch(
+        'https://issue-tracker-m82y.onrender.com/api/issues',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            ...values,
+            priority: values.priority,
+            status: values.status, // Ensure status is included
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error('Failed to create issue');

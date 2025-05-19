@@ -44,7 +44,9 @@ const IssueTable: React.FC = () => {
 
   const fetchIssues = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/issues');
+      const response = await fetch(
+        'https://issue-tracker-m82y.onrender.com/api/issues'
+      );
       if (!response.ok) {
         throw new Error('Failed to fetch issues');
       }
@@ -62,9 +64,12 @@ const IssueTable: React.FC = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/issues/${id}`, {
-        method: 'DELETE',
-      });
+      const response = await fetch(
+        `https://issue-tracker-m82y.onrender.com/api/issues/${id}`,
+        {
+          method: 'DELETE',
+        }
+      );
 
       if (!response.ok) {
         throw new Error('Failed to delete issue');
@@ -104,13 +109,16 @@ const IssueTable: React.FC = () => {
 
   const handleUpdateStatus = async (id: string, newStatus: string) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/issues/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ status: newStatus }),
-      });
+      const response = await fetch(
+        `https://issue-tracker-m82y.onrender.com/api/issues/${id}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ status: newStatus }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error('Failed to update status');
