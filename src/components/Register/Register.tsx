@@ -1,17 +1,78 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { notifications } from '@mantine/notifications';
+import { IconCheck, IconX } from '@tabler/icons-react';
 import classes from './Register.module.css';
 
 const Register: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Email:', email);
-    console.log('Password:', password);
-    console.log('Confirm Password:', confirmPassword);
-    // Add your registration logic here
+
+    if (password !== confirmPassword) {
+      notifications.show({
+        color: 'red',
+        title: 'Registration Failed',
+        message: 'Passwords do not match',
+        icon: <IconX size={18} />,
+        autoClose: 2000,
+      });
+      return;
+    }
+
+    const id = notifications.show({
+      loading: true,
+      title: 'Registering',
+      message: 'Please wait while we create your account...',
+      autoClose: false,
+      withCloseButton: false,
+    });
+
+    try {
+      const response = await fetch('http://localhost:3000/api/users/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        const { error } = await response.json();
+        notifications.update({
+          id,
+          color: 'red',
+          title: 'Registration Failed',
+          message: error,
+          icon: <IconX size={18} />,
+          autoClose: 2000,
+        });
+        return;
+      }
+
+      notifications.update({
+        id,
+        color: 'teal',
+        title: 'Registration Successful',
+        message: 'Your account has been created!',
+        icon: <IconCheck size={18} />,
+        autoClose: 2000,
+      });
+
+      navigate('/login');
+    } catch (err) {
+      console.error('Error registering user:', err);
+      notifications.update({
+        id,
+        color: 'red',
+        title: 'Registration Failed',
+        message: 'An error occurred. Please try again.',
+        icon: <IconX size={18} />,
+        autoClose: 2000,
+      });
+    }
   };
 
   return (

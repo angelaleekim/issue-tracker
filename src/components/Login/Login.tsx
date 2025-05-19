@@ -1,15 +1,69 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { notifications } from '@mantine/notifications';
+import { IconCheck, IconX } from '@tabler/icons-react';
 import classes from './Login.module.css';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Email:', email);
-    console.log('Password:', password);
+
+    const id = notifications.show({
+      loading: true,
+      title: 'Logging in',
+      message: 'Please wait while we verify your credentials...',
+      autoClose: false,
+      withCloseButton: false,
+    });
+
+    try {
+      const response = await fetch('http://localhost:3000/api/users/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        const { error } = await response.json();
+        notifications.update({
+          id,
+          color: 'red',
+          title: 'Login Failed',
+          message: error,
+          icon: <IconX size={18} />,
+          autoClose: 2000,
+        });
+        return;
+      }
+
+      const { token } = await response.json();
+      localStorage.setItem('token', token);
+
+      notifications.update({
+        id,
+        color: 'teal',
+        title: 'Login Successful',
+        message: 'You have successfully logged in!',
+        icon: <IconCheck size={18} />,
+        autoClose: 2000,
+      });
+
+      navigate('/dashboard');
+    } catch (err) {
+      console.error('Error logging in:', err);
+      notifications.update({
+        id,
+        color: 'red',
+        title: 'Login Failed',
+        message: 'An error occurred. Please try again.',
+        icon: <IconX size={18} />,
+        autoClose: 2000,
+      });
+    }
   };
 
   return (
@@ -43,9 +97,7 @@ const Login: React.FC = () => {
           />
         </div>
         <button type="submit" className={classes.button}>
-          <Link to="/dashboard" className={classes.link}>
-            Login
-          </Link>
+          Login
         </button>
       </form>
       <p>

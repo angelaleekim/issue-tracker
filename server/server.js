@@ -3,6 +3,7 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import issueRoutes from './routes/issues.js';
+import userRoutes from './routes/users.js';
 
 const app = express();
 const PORT = 3000;
@@ -20,6 +21,7 @@ mongoose
 app.use(cors()); // Enable CORS for cross-origin requests
 app.use(express.json()); // Parse JSON request bodies
 app.use('/api/issues', issueRoutes);
+app.use('/api/users', userRoutes);
 
 // Example Route
 app.get('/', (req, res) => {
