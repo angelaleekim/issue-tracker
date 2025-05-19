@@ -16,6 +16,7 @@
     "@mantine/hooks": "7.17.4",
     "@mantine/notifications": "7.17.4",
     "@tabler/icons-react": "^3.31.0",
+    "axios": "^1.4.0",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
@@ -24,21 +25,21 @@
     "mongoose": "^8.15.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "axios": "^1.4.0",
     "react-router-dom": "^6.16.0"
   },
   "devDependencies": {
     "@types/react": "^19.0.12",
     "@types/react-dom": "^19.0.4",
+    "@types/react-router-dom": "^5.3.3",
     "@vitejs/plugin-react": "^4.3.4",
     "postcss": "^8.5.3",
     "postcss-preset-mantine": "1.17.0",
     "postcss-simple-vars": "^7.0.1",
     "prettier": "^3.5.3",
+    "rollup": "^4.41.0",
     "rollup-plugin-visualizer": "^5.14.0",
     "typescript": "^5.8.2",
-    "vite": "^6.2.2",
-    "@types/react-router-dom": "^5.3.3"
+    "vite": "^6.2.2"
   },
   "engines": {
     "node": ">=16.0.0"
