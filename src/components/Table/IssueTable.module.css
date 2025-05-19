@@ -30,3 +30,18 @@
   align-items: center;
   gap: 1em; /* Add spacing between Select and Pagination */
 }
+
+@media (max-width: 768px) {
+  .tableRow {
+    font-size: 0.9rem;
+  }
+
+  .paginationContainer {
+    flex-direction: column;
+    gap: 0.5em;
+  }
+
+  .select {
+    width: 100%;
+  }
+}
