@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from '@mantine/form';
 import { TextInput, Textarea, Button, Box, Select } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
@@ -9,6 +9,20 @@ import '@mantine/notifications/styles.css';
 
 const IssueForm: React.FC = () => {
   const navigate = useNavigate(); // Initialize navigate
+  const [checkingAuth, setCheckingAuth] = useState(true); // Add state to check authentication
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      window.location.href = '/login'; // Redirect unauthenticated users to the login page
+    } else {
+      setCheckingAuth(false); // Allow rendering if authenticated
+    }
+  }, []);
+
+  if (checkingAuth) {
+    return null; // Prevent rendering until authentication check is complete
+  }
 
   interface FormValues {
     title: string;

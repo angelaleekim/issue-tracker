@@ -44,6 +44,22 @@ const IssueTable: React.FC = () => {
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [opened, { open, close }] = useDisclosure(false);
   const [selectedIssue, setSelectedIssue] = useState<Issue | null>(null);
+  const [checkingAuth, setCheckingAuth] = useState(true); // Add state to check authentication
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      window.location.href = '/login'; // Redirect unauthenticated users to the login page
+    } else {
+      setCheckingAuth(false); // Allow rendering if authenticated
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!checkingAuth) {
+      fetchIssues();
+    }
+  }, [checkingAuth]);
 
   const fetchIssues = async () => {
     try {
@@ -187,10 +203,6 @@ const IssueTable: React.FC = () => {
     if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1;
     return 0;
   });
-
-  useEffect(() => {
-    fetchIssues();
-  }, []);
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedIssues = sortedIssues.slice(
