@@ -280,7 +280,7 @@ const IssueTable: React.FC = () => {
           data={[
             { label: 'Pending', value: 'pending' },
             { label: 'In Progress', value: 'in_progress' },
-            { label: 'Complete', value: 'resolved' },
+            { label: 'Resolved', value: 'resolved' }, // Change "Complete" to "Resolved"
           ]}
           className={classes.segmentedControl}
         />
