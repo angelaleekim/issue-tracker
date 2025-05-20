@@ -222,7 +222,7 @@ const IssueTable: React.FC = () => {
           <Menu.Target>
             <ActionIcon
               variant="subtle"
-              color="black"
+              color="default"
               onClick={(e) => e.stopPropagation()} // Prevent modal from opening
             >
               <IconDots size={16} />
