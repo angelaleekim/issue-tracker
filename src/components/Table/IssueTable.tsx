@@ -9,6 +9,7 @@ import {
   Modal,
   Button,
   Tooltip,
+  Loader,
 } from '@mantine/core';
 import {
   IconDots,
@@ -36,6 +37,7 @@ interface Issue {
 
 const IssueTable: React.FC = () => {
   const [issues, setIssues] = useState<Issue[]>([]);
+  const [loading, setLoading] = useState(true); // Add loading state
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [sortBy, setSortBy] = useState<keyof Issue | null>(null);
@@ -58,10 +60,10 @@ const IssueTable: React.FC = () => {
           priority: issue.priority.toUpperCase(), // Convert to uppercase (e.g., 'LOW', 'MEDIUM', 'HIGH')
         }))
       );
-      setSortBy('createdAt'); // Default sort by createdAt
-      setSortDirection('desc'); // Default to descending order
     } catch (error) {
       console.error('Error fetching issues:', error);
+    } finally {
+      setLoading(false); // Set loading to false after fetching
     }
   };
 
@@ -253,6 +255,24 @@ const IssueTable: React.FC = () => {
       </Table.Td>
     </Table.Tr>
   ));
+
+  if (loading) {
+    return (
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          marginTop: '20vh',
+        }}
+      >
+        <Loader variant="dots" />
+      </div>
+    );
+  }
+
+  if (issues.length === 0) {
+    return null; // Show nothing if there are no issues
+  }
 
   return (
     <div>
