@@ -7,6 +7,14 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import classes from './IssueForm.module.css';
 import '@mantine/notifications/styles.css';
 
+interface FormValues {
+  title: string;
+  description: string;
+  priority: string;
+  author: string;
+  status: string;
+}
+
 const IssueForm: React.FC = () => {
   const navigate = useNavigate(); // Initialize navigate
   const [checkingAuth, setCheckingAuth] = useState(true); // Add state to check authentication
@@ -14,23 +22,11 @@ const IssueForm: React.FC = () => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
-      window.location.href = '/login'; // Redirect unauthenticated users to the login page
+      navigate('/login'); // Redirect unauthenticated users to the login page
     } else {
       setCheckingAuth(false); // Allow rendering if authenticated
     }
-  }, []);
-
-  if (checkingAuth) {
-    return null; // Prevent rendering until authentication check is complete
-  }
-
-  interface FormValues {
-    title: string;
-    description: string;
-    priority: string;
-    author: string;
-    status: string; // Add status field
-  }
+  }, [navigate]);
 
   const form = useForm<FormValues>({
     initialValues: {
@@ -51,6 +47,10 @@ const IssueForm: React.FC = () => {
         value.trim().length === 0 ? 'Author is required' : null,
     },
   });
+
+  if (checkingAuth) {
+    return null; // Prevent rendering until authentication check is complete
+  }
 
   const handleSubmit = async (values: typeof form.values) => {
     const id = notifications.show({

@@ -16,7 +16,6 @@ import {
   IconTrash,
   IconCheck,
   IconX,
-  IconEye,
   IconClock,
   IconSend,
 } from '@tabler/icons-react'; // Import icons
@@ -123,11 +122,6 @@ const IssueTable: React.FC = () => {
     }
   };
 
-  const handleView = (issue: Issue) => {
-    setSelectedIssue(issue);
-    open();
-  };
-
   const handleUpdateStatus = async (id: string, newStatus: string) => {
     try {
       const response = await fetch(
@@ -146,11 +140,15 @@ const IssueTable: React.FC = () => {
       }
 
       const updatedIssue = await response.json();
-      setIssues((prevIssues) =>
-        prevIssues.map((issue) =>
+      setIssues((prevIssues) => {
+        const updatedIssues = prevIssues.map((issue) =>
           issue._id === id ? { ...issue, status: updatedIssue.status } : issue
-        )
-      );
+        );
+        const movedIssue = updatedIssues.find((issue) => issue._id === id);
+        return movedIssue
+          ? [movedIssue, ...updatedIssues.filter((issue) => issue._id !== id)]
+          : updatedIssues;
+      });
 
       notifications.show({
         color: 'teal',
@@ -161,6 +159,8 @@ const IssueTable: React.FC = () => {
         )}.`,
         icon: <IconCheck size={18} />,
       });
+
+      close(); // Close the modal after updating the status
     } catch (error) {
       console.error('Error updating status:', error);
       notifications.show({
@@ -211,7 +211,15 @@ const IssueTable: React.FC = () => {
   );
 
   const rows = paginatedIssues.map((issue) => (
-    <Table.Tr key={issue._id} className={classes.tableRow}>
+    <Table.Tr
+      key={issue._id}
+      className={classes.tableRow}
+      onClick={() => {
+        setSelectedIssue(issue);
+        open();
+      }}
+      style={{ cursor: 'pointer' }} // Add pointer cursor
+    >
       <Table.Td>{issue.title}</Table.Td>
       <Table.Td>{issue.author}</Table.Td>
       <Table.Td>{issue.description}</Table.Td>
@@ -244,21 +252,22 @@ const IssueTable: React.FC = () => {
       <Table.Td>
         <Menu>
           <Menu.Target>
-            <ActionIcon variant="subtle" color="black">
+            <ActionIcon
+              variant="subtle"
+              color="black"
+              onClick={(e) => e.stopPropagation()} // Prevent modal from opening
+            >
               <IconDots size={16} />
             </ActionIcon>
           </Menu.Target>
           <Menu.Dropdown>
             <Menu.Item
-              leftSection={<IconEye size={16} />} // Eye icon for View
-              onClick={() => handleView(issue)}
-            >
-              View
-            </Menu.Item>
-            <Menu.Item
               leftSection={<IconTrash size={16} />}
               color="red"
-              onClick={() => handleDelete(issue._id)}
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent row click from triggering
+                handleDelete(issue._id);
+              }}
             >
               Delete
             </Menu.Item>
