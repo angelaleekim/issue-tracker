@@ -5,14 +5,22 @@ const router = express.Router();
 
 // Create an issue
 router.post('/', async (req, res) => {
+  const { title, description, priority, author, status } = req.body;
+
   try {
-    console.log('Request Body:', req.body); // Debugging log
-    const issue = new Issue(req.body);
-    await issue.save();
-    res.status(201).json(issue);
+    const newIssue = new Issue({
+      title,
+      description,
+      priority,
+      author,
+      status,
+      createdAt: new Date(), // Set createdAt field
+    });
+
+    await newIssue.save();
+    res.status(201).json(newIssue);
   } catch (err) {
-    console.error('Error saving issue:', err);
-    res.status(400).json({ error: err.message });
+    res.status(500).json({ error: err.message });
   }
 });
 

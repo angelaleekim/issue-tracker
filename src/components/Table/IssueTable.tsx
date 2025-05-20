@@ -31,6 +31,7 @@ interface Issue {
   priority: Priority;
   author: string;
   status: string;
+  createdAt: string; // Add createdAt field
 }
 
 const IssueTable: React.FC = () => {
@@ -57,6 +58,8 @@ const IssueTable: React.FC = () => {
           priority: issue.priority.toUpperCase(), // Convert to uppercase (e.g., 'LOW', 'MEDIUM', 'HIGH')
         }))
       );
+      setSortBy('createdAt'); // Default sort by createdAt
+      setSortDirection('desc'); // Default to descending order
     } catch (error) {
       console.error('Error fetching issues:', error);
     }
@@ -157,6 +160,12 @@ const IssueTable: React.FC = () => {
 
   const sortedIssues = [...issues].sort((a, b) => {
     if (!sortBy) return 0;
+
+    if (sortBy === 'createdAt') {
+      const aDate = new Date(a.createdAt).getTime();
+      const bDate = new Date(b.createdAt).getTime();
+      return sortDirection === 'asc' ? aDate - bDate : bDate - aDate;
+    }
 
     if (sortBy === 'priority') {
       const aIndex = PRIORITY_ORDER.indexOf(a.priority);
