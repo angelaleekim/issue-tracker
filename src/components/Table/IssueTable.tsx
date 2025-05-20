@@ -8,17 +8,10 @@ import {
   ActionIcon,
   Modal,
   Button,
-  Tooltip,
   Loader,
+  SegmentedControl,
 } from '@mantine/core';
-import {
-  IconDots,
-  IconTrash,
-  IconCheck,
-  IconX,
-  IconClock,
-  IconSend,
-} from '@tabler/icons-react'; // Import icons
+import { IconDots, IconTrash, IconCheck, IconX } from '@tabler/icons-react'; // Import icons
 import { notifications } from '@mantine/notifications';
 import classes from './IssueTable.module.css';
 import { PRIORITY_COLORS, Priority } from '../../constants';
@@ -39,6 +32,7 @@ const IssueTable: React.FC = () => {
   const [loading, setLoading] = useState(true); // Add loading state
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [selectedStatus, setSelectedStatus] = useState('pending'); // Add state for selected status
   const [sortBy, setSortBy] = useState<keyof Issue | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [opened, { open, close }] = useDisclosure(false);
@@ -70,10 +64,15 @@ const IssueTable: React.FC = () => {
       }
       const data = await response.json();
       setIssues(
-        data.map((issue: Issue) => ({
-          ...issue,
-          priority: issue.priority.toUpperCase(), // Convert to uppercase (e.g., 'LOW', 'MEDIUM', 'HIGH')
-        }))
+        data
+          .map((issue: Issue) => ({
+            ...issue,
+            priority: issue.priority.toUpperCase(), // Convert to uppercase (e.g., 'LOW', 'MEDIUM', 'HIGH')
+          }))
+          .sort(
+            (a: Issue, b: Issue) =>
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          ) // Sort by newest first
       );
     } catch (error) {
       console.error('Error fetching issues:', error);
@@ -120,6 +119,21 @@ const IssueTable: React.FC = () => {
       setSortBy(field);
       setSortDirection('asc');
     }
+
+    setIssues((prevIssues) =>
+      [...prevIssues].sort((a, b) => {
+        if (field === 'priority') {
+          const priorityOrder = ['low', 'medium', 'high'];
+          const comparison =
+            priorityOrder.indexOf(a.priority.toLowerCase()) -
+            priorityOrder.indexOf(b.priority.toLowerCase());
+          return sortDirection === 'asc' ? comparison : -comparison;
+        } else {
+          const comparison = a[field].localeCompare(b[field]);
+          return sortDirection === 'asc' ? comparison : -comparison;
+        }
+      })
+    );
   };
 
   const handleUpdateStatus = async (id: string, newStatus: string) => {
@@ -141,14 +155,18 @@ const IssueTable: React.FC = () => {
 
       const updatedIssue = await response.json();
       setIssues((prevIssues) => {
-        const updatedIssues = prevIssues.map((issue) =>
-          issue._id === id ? { ...issue, status: updatedIssue.status } : issue
-        );
-        const movedIssue = updatedIssues.find((issue) => issue._id === id);
-        return movedIssue
-          ? [movedIssue, ...updatedIssues.filter((issue) => issue._id !== id)]
-          : updatedIssues;
+        const updatedIssues = prevIssues.filter((issue) => issue._id !== id);
+        return [
+          { ...updatedIssue, priority: updatedIssue.priority.toUpperCase() },
+          ...updatedIssues,
+        ].sort(
+          (a, b) =>
+            new Date(b.updatedAt || b.createdAt).getTime() -
+            new Date(a.updatedAt || a.createdAt).getTime()
+        ); // Sort by newest first
       });
+
+      setSelectedStatus(newStatus); // Show the section of the updated status
 
       notifications.show({
         color: 'teal',
@@ -173,39 +191,20 @@ const IssueTable: React.FC = () => {
     }
   };
 
-  const PRIORITY_ORDER = ['LOW', 'MEDIUM', 'HIGH'];
-  const STATUS_ORDER = ['pending', 'in_progress', 'resolved']; // Define status order
+  const handleCreateIssue = (newIssue: Issue) => {
+    setIssues((prevIssues) => [
+      { ...newIssue, priority: newIssue.priority.toUpperCase() as Priority },
+      ...prevIssues,
+    ]);
+    setSelectedStatus('pending'); // Show the "Pending" section
+  };
 
-  const sortedIssues = [...issues].sort((a, b) => {
-    if (!sortBy) return 0;
-
-    if (sortBy === 'createdAt') {
-      const aDate = new Date(a.createdAt).getTime();
-      const bDate = new Date(b.createdAt).getTime();
-      return sortDirection === 'asc' ? aDate - bDate : bDate - aDate;
-    }
-
-    if (sortBy === 'priority') {
-      const aIndex = PRIORITY_ORDER.indexOf(a.priority);
-      const bIndex = PRIORITY_ORDER.indexOf(b.priority);
-      return sortDirection === 'asc' ? aIndex - bIndex : bIndex - aIndex;
-    }
-
-    if (sortBy === 'status') {
-      const aIndex = STATUS_ORDER.indexOf(a.status);
-      const bIndex = STATUS_ORDER.indexOf(b.status);
-      return sortDirection === 'asc' ? aIndex - bIndex : bIndex - aIndex;
-    }
-
-    const aValue = a[sortBy];
-    const bValue = b[sortBy];
-    if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1;
-    if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1;
-    return 0;
-  });
+  const filteredIssues = issues.filter(
+    (issue) => issue.status === selectedStatus
+  );
 
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedIssues = sortedIssues.slice(
+  const paginatedIssues = filteredIssues.slice(
     startIndex,
     startIndex + itemsPerPage
   );
@@ -225,29 +224,6 @@ const IssueTable: React.FC = () => {
       <Table.Td>{issue.description}</Table.Td>
       <Table.Td>
         <Badge color={PRIORITY_COLORS[issue.priority]}>{issue.priority}</Badge>
-      </Table.Td>
-      <Table.Td>
-        <Tooltip label="Pending" withArrow>
-          <div>
-            {issue.status === 'pending' && (
-              <IconClock color="#4dabf7" size={18} />
-            )}
-          </div>
-        </Tooltip>
-        <Tooltip label="In Progress" withArrow>
-          <div>
-            {issue.status === 'in_progress' && (
-              <IconSend color="#b197fc" size={18} />
-            )}
-          </div>
-        </Tooltip>
-        <Tooltip label="Resolved" withArrow>
-          <div>
-            {issue.status === 'resolved' && (
-              <IconCheck color="#69db7c" size={18} />
-            )}
-          </div>
-        </Tooltip>
       </Table.Td>
       <Table.Td>
         <Menu>
@@ -297,6 +273,26 @@ const IssueTable: React.FC = () => {
 
   return (
     <div>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          marginBottom: '20px',
+        }}
+      >
+        <SegmentedControl
+          fullWidth
+          withItemsBorders={false}
+          value={selectedStatus}
+          onChange={setSelectedStatus}
+          data={[
+            { label: 'Pending', value: 'pending' },
+            { label: 'In Progress', value: 'in_progress' },
+            { label: 'Complete', value: 'resolved' },
+          ]}
+          className={classes.segmentedControl}
+        />
+      </div>
       <Table highlightOnHover={true} className={classes.table}>
         <Table.Thead>
           <Table.Tr>
@@ -321,13 +317,6 @@ const IssueTable: React.FC = () => {
             >
               Priority{' '}
               {sortBy === 'priority' && (sortDirection === 'asc' ? '↑' : '↓')}
-            </Table.Th>
-            <Table.Th
-              className={classes.headerCell}
-              onClick={() => handleSort('status')}
-            >
-              Status{' '}
-              {sortBy === 'status' && (sortDirection === 'asc' ? '↑' : '↓')}
             </Table.Th>
             <Table.Th className={classes.headerCell}></Table.Th>
           </Table.Tr>
@@ -410,7 +399,7 @@ const IssueTable: React.FC = () => {
           className={classes.select}
         />
         <Pagination
-          total={Math.ceil(issues.length / itemsPerPage)}
+          total={Math.ceil(filteredIssues.length / itemsPerPage)}
           value={currentPage}
           onChange={setCurrentPage}
           className={classes.pagination}
