@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
@@ -7,17 +7,7 @@ import classes from './Login.module.css';
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [checkingAuth, setCheckingAuth] = useState(true); // Add state to check authentication
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      navigate('/dashboard'); // Redirect logged-in users to the dashboard
-    } else {
-      setCheckingAuth(false); // Allow rendering the login page if not authenticated
-    }
-  }, [navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,10 +69,6 @@ const Login: React.FC = () => {
       });
     }
   };
-
-  if (checkingAuth) {
-    return null; // Prevent rendering until authentication check is complete
-  }
 
   return (
     <div className={classes.container}>

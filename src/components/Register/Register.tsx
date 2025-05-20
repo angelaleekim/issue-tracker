@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
@@ -8,17 +8,7 @@ const Register: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [checkingAuth, setCheckingAuth] = useState(true); // Add state to check authentication
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      navigate('/dashboard'); // Redirect logged-in users to the dashboard
-    } else {
-      setCheckingAuth(false); // Allow rendering the register page if not authenticated
-    }
-  }, [navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -90,10 +80,6 @@ const Register: React.FC = () => {
       });
     }
   };
-
-  if (checkingAuth) {
-    return null; // Prevent rendering until authentication check is complete
-  }
 
   return (
     <div className={classes.container}>
