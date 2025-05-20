@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
-import { Drawer, ActionIcon, NavLink } from '@mantine/core';
+import {
+  Drawer,
+  ActionIcon,
+  NavLink,
+  useMantineColorScheme,
+} from '@mantine/core';
 import { IconBug, IconMenu2, IconList, IconLogout } from '@tabler/icons-react';
 import { Link, useNavigate } from 'react-router-dom';
 import classes from './Navbar.module.css';
 
 const Navbar: React.FC = () => {
   const [opened, setOpened] = useState(false);
-  const navigate = useNavigate(); // Initialize navigate
+  const navigate = useNavigate();
+  const { colorScheme } = useMantineColorScheme(); // Use Mantine's color scheme hook
 
   const handleClose = () => setOpened(false); // Function to close the drawer
 
@@ -81,7 +87,10 @@ const Navbar: React.FC = () => {
         size="lg"
         variant="subtle"
       >
-        <IconMenu2 size={24} />
+        <IconMenu2
+          size={24}
+          color={colorScheme === 'dark' ? 'white' : 'black'} // Change color based on color scheme
+        />
       </ActionIcon>
     </>
   );

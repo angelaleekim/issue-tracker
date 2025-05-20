@@ -29,7 +29,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
 
 export default function App() {
   return (
-    <MantineProvider>
+    <MantineProvider defaultColorScheme="dark">
       <Notifications position="top-right" zIndex={1000} />
       <Router>
         <Routes>
