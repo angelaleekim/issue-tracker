@@ -29,7 +29,9 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
 
 export default function App() {
   return (
-    <MantineProvider defaultColorScheme="dark">
+    <MantineProvider
+      defaultColorScheme="dark" // Set default color scheme to dark
+    >
       <Notifications position="top-right" zIndex={1000} />
       <Router>
         <Routes>

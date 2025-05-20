@@ -1,29 +1,31 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
+import { TextInput, Button, Box, Title } from '@mantine/core';
+import { useForm } from '@mantine/form';
 import classes from './Register.module.css';
 
 const Register: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const form = useForm({
+    initialValues: {
+      email: '',
+      password: '',
+      confirmPassword: '',
+    },
+    validate: {
+      email: (value) =>
+        /^\S+@\S+$/.test(value) ? null : 'Invalid email address',
+      password: (value) =>
+        value.trim().length > 0 ? null : 'Password is required',
+      confirmPassword: (value, values) =>
+        value === values.password ? null : 'Passwords do not match',
+    },
+  });
 
-    if (password !== confirmPassword) {
-      notifications.show({
-        color: 'red',
-        title: 'Registration Failed',
-        message: 'Passwords do not match',
-        icon: <IconX size={18} />,
-        autoClose: 2000,
-      });
-      return;
-    }
-
+  const handleSubmit = async (values: typeof form.values) => {
     const id = notifications.show({
       loading: true,
       title: 'Registering',
@@ -38,7 +40,10 @@ const Register: React.FC = () => {
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password }),
+          body: JSON.stringify({
+            email: values.email,
+            password: values.password,
+          }),
         }
       );
 
@@ -49,7 +54,6 @@ const Register: React.FC = () => {
           color: 'red',
           title: 'Registration Failed',
           message: error,
-          loading: false,
           icon: <IconX size={18} />,
           autoClose: 2000,
         });
@@ -61,7 +65,6 @@ const Register: React.FC = () => {
         color: 'teal',
         title: 'Registration Successful',
         message: 'Your account has been created!',
-        loading: false,
         icon: <IconCheck size={18} />,
         autoClose: 2000,
       });
@@ -73,7 +76,6 @@ const Register: React.FC = () => {
         id,
         color: 'red',
         title: 'Registration Failed',
-        loading: false,
         message: 'An error occurred. Please try again.',
         icon: <IconX size={18} />,
         autoClose: 2000,
@@ -82,53 +84,36 @@ const Register: React.FC = () => {
   };
 
   return (
-    <div className={classes.container}>
-      <h2 className={classes.heading}>Register</h2>
-      <form onSubmit={handleSubmit}>
-        <div className={classes.formGroup}>
-          <label htmlFor="email" className={classes.label}>
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className={classes.input}
-            required
-          />
-        </div>
-        <div className={classes.formGroup}>
-          <label htmlFor="password" className={classes.label}>
-            Password
-          </label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className={classes.input}
-            required
-          />
-        </div>
-        <div className={classes.formGroup}>
-          <label htmlFor="confirmPassword" className={classes.label}>
-            Confirm Password
-          </label>
-          <input
-            type="password"
-            id="confirmPassword"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            className={classes.input}
-            required
-          />
-        </div>
-        <button type="submit" className={classes.button}>
+    <Box className={classes.container}>
+      <Title order={2} className={classes.heading}>
+        Register
+      </Title>
+      <form onSubmit={form.onSubmit(handleSubmit)}>
+        <TextInput
+          label="Email"
+          placeholder="Enter your email"
+          {...form.getInputProps('email')}
+          className={classes.input}
+        />
+        <TextInput
+          label="Password"
+          placeholder="Enter your password"
+          type="password"
+          {...form.getInputProps('password')}
+          className={classes.input}
+        />
+        <TextInput
+          label="Confirm Password"
+          placeholder="Confirm your password"
+          type="password"
+          {...form.getInputProps('confirmPassword')}
+          className={classes.input}
+        />
+        <Button type="submit" className={classes.button}>
           Register
-        </button>
+        </Button>
       </form>
-    </div>
+    </Box>
   );
 };
 

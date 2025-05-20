@@ -1,13 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
+import { TextInput, Button, Box, Title } from '@mantine/core';
+import { useForm } from '@mantine/form';
 import classes from './Login.module.css';
 
 const Login: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const navigate = useNavigate();
+
+  const form = useForm({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    validate: {
+      email: (value) =>
+        /^\S+@\S+$/.test(value) ? null : 'Invalid email address',
+      password: (value) =>
+        value.trim().length > 0 ? null : 'Password is required',
+    },
+  });
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -16,9 +29,7 @@ const Login: React.FC = () => {
     }
   }, [navigate]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
+  const handleSubmit = async (values: typeof form.values) => {
     const id = notifications.show({
       loading: true,
       title: 'Logging in',
@@ -33,7 +44,7 @@ const Login: React.FC = () => {
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password }),
+          body: JSON.stringify(values),
         }
       );
 
@@ -78,43 +89,32 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className={classes.container}>
-      <h2 className={classes.heading}>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div className={classes.formGroup}>
-          <label htmlFor="email" className={classes.label}>
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className={classes.input}
-            required
-          />
-        </div>
-        <div className={classes.formGroup}>
-          <label htmlFor="password" className={classes.label}>
-            Password
-          </label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className={classes.input}
-            required
-          />
-        </div>
-        <button type="submit" className={classes.button}>
+    <Box className={classes.container}>
+      <Title order={2} className={classes.heading}>
+        Login
+      </Title>
+      <form onSubmit={form.onSubmit(handleSubmit)}>
+        <TextInput
+          label="Email"
+          placeholder="Enter your email"
+          {...form.getInputProps('email')}
+          className={classes.input}
+        />
+        <TextInput
+          label="Password"
+          placeholder="Enter your password"
+          type="password"
+          {...form.getInputProps('password')}
+          className={classes.input}
+        />
+        <Button type="submit" className={classes.button}>
           Login
-        </button>
+        </Button>
       </form>
       <p>
         Don't have an account? <Link to="/register">Register</Link>
       </p>
-    </div>
+    </Box>
   );
 };
 
