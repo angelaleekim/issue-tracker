@@ -191,14 +191,6 @@ const IssueTable: React.FC = () => {
     }
   };
 
-  const handleCreateIssue = (newIssue: Issue) => {
-    setIssues((prevIssues) => [
-      { ...newIssue, priority: newIssue.priority.toUpperCase() as Priority },
-      ...prevIssues,
-    ]);
-    setSelectedStatus('pending'); // Show the "Pending" section
-  };
-
   const filteredIssues = issues.filter(
     (issue) => issue.status === selectedStatus
   );
