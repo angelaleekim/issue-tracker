@@ -69,4 +69,22 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+const selfPing = async () => {
+  try {
+    const response = await fetch(
+      'https://issue-tracker-m82y.onrender.com/api/issues'
+    );
+    if (response.ok) {
+      console.log('Self-ping successful');
+    } else {
+      console.error('Self-ping failed:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error during self-ping:', error);
+  }
+};
+
+// Schedule self-ping every 5 minutes
+setInterval(selfPing, 5 * 60 * 1000);
+
 export default router;
