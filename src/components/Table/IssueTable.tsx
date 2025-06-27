@@ -37,22 +37,20 @@ const IssueTable: React.FC = () => {
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [opened, { open, close }] = useDisclosure(false);
   const [selectedIssue, setSelectedIssue] = useState<Issue | null>(null);
-  const [checkingAuth, setCheckingAuth] = useState(true); // Add state to check authentication
+  // const [checkingAuth, setCheckingAuth] = useState(true); // Add state to check authentication
+
+  // useEffect(() => {
+  //   const token = localStorage.getItem('token');
+  //   if (!token) {
+  //     window.location.href = '/login'; // Redirect unauthenticated users to the login page
+  //   } else {
+  //     setCheckingAuth(false); // Allow rendering if authenticated
+  //   }
+  // }, []);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      window.location.href = '/login'; // Redirect unauthenticated users to the login page
-    } else {
-      setCheckingAuth(false); // Allow rendering if authenticated
-    }
+    fetchIssues();
   }, []);
-
-  useEffect(() => {
-    if (!checkingAuth) {
-      fetchIssues();
-    }
-  }, [checkingAuth]);
 
   const fetchIssues = async () => {
     try {

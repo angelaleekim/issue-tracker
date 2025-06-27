@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+// import React, { useEffect, useState } from 'react';
 import { useForm } from '@mantine/form';
 import { TextInput, Textarea, Button, Box, Select } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
@@ -17,16 +17,16 @@ interface FormValues {
 
 const IssueForm: React.FC = () => {
   const navigate = useNavigate(); // Initialize navigate
-  const [checkingAuth, setCheckingAuth] = useState(true); // Add state to check authentication
+  // const [checkingAuth, setCheckingAuth] = useState(true); // Add state to check authentication
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      navigate('/login'); // Redirect unauthenticated users to the login page
-    } else {
-      setCheckingAuth(false); // Allow rendering if authenticated
-    }
-  }, [navigate]);
+  // useEffect(() => {
+  //   const token = localStorage.getItem('token');
+  //   if (!token) {
+  //     navigate('/login'); // Redirect unauthenticated users to the login page
+  //   } else {
+  //     setCheckingAuth(false); // Allow rendering if authenticated
+  //   }
+  // }, [navigate]);
 
   const form = useForm<FormValues>({
     initialValues: {
@@ -48,9 +48,9 @@ const IssueForm: React.FC = () => {
     },
   });
 
-  if (checkingAuth) {
-    return null; // Prevent rendering until authentication check is complete
-  }
+  // if (checkingAuth) {
+  //   return null; // Prevent rendering until authentication check is complete
+  // }
 
   const handleSubmit = async (values: typeof form.values) => {
     const id = notifications.show({

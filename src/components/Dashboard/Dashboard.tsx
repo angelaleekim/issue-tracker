@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+// import React, { useEffect, useState } from 'react';
 import IssueTable from '../Table/IssueTable';
 import {
   MantineProvider,
@@ -12,21 +12,21 @@ import classes from './Dashboard.module.css';
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate(); // Initialize navigate
-  const [checkingAuth, setCheckingAuth] = useState(true); // Add state to check authentication
+  // const [checkingAuth, setCheckingAuth] = useState(true); // Add state to check authentication
   const { colorScheme, toggleColorScheme } = useMantineColorScheme(); // Use Mantine's color scheme hook
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      window.location.href = '/login'; // Redirect unauthenticated users to the login page
-    } else {
-      setCheckingAuth(false); // Allow rendering if authenticated
-    }
-  }, []);
+  // useEffect(() => {
+  //   const token = localStorage.getItem('token');
+  //   if (!token) {
+  //     window.location.href = '/login'; // Redirect unauthenticated users to the login page
+  //   } else {
+  //     setCheckingAuth(false); // Allow rendering if authenticated
+  //   }
+  // }, []);
 
-  if (checkingAuth) {
-    return null; // Prevent rendering until authentication check is complete
-  }
+  // if (checkingAuth) {
+  //   return null; // Prevent rendering until authentication check is complete
+  // }
 
   return (
     <MantineProvider>
