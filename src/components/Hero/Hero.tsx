@@ -10,12 +10,12 @@ const Hero: React.FC = () => {
         Track and manage your issues efficiently.
       </p>
       <div className={classes.buttonContainer}>
-        {/* <Link to="/register" className={classes.button}>
+        <Link to="/register" className={classes.button}>
           Register
-        </Link> */}
-        {/* <Link to="/login" className={classes.button}>
+        </Link>
+        <Link to="/login" className={classes.button}>
           Login
-        </Link> */}
+        </Link>
         <Link to="/dashboard" className={classes.button}>
           View Demo
         </Link>
